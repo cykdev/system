@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div id="login-page" class="login-form">
+            <form action="#">
+                <h1>Login</h1>
+                <div class="input-box">
+                    <input type="text" id="l-username" required>
+                    <label>Username</label>
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="l-password" required>
+                    <label>Password</label>
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <div class="forg-pass">
+                    <a href="#">forgot password?</a>
+                </div>
+                <div class="login-btn">
+                    <button type="submit">Login</button>
+                </div>
+                <div class="no-acc">
+                    <label>Don't have an account? <a href="#" onclick="showSignup()">Sign Up</a></label>
+                </div>
+
+            </form>
+        </div>
+
+        <div class="hidden" id="signup-page">
+            <form action="#">
+                <h1>Sign Up</h1>
+                <div class="input-box">
+                    <input type="text" id="s-username" required>
+                    <label>Username</label>
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="input-box">
+                    <input type="email" id="s-email" required>
+                    <label>Email</label>
+                    <i class="fa-solid fa-envelope"></i>
+                </div>
+                <div class="input-box">
+                    <input type="number" id="s-contact" required>
+                    <label>Contact Number</label>
+                    <i class="fa-solid fa-phone"></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="s-password" required>
+                    <label>Password</label>
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <div class="signup-btn">
+                    <button type="submit">Sign Up</button>
+                </div>
+                <div class="have-acc">
+                    <label>Already have an account? <a href="#" onclick="showLogin()">Login</a></label>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showSignup() {
+            document.getElementById('login-page').classList.add('hidden');
+            document.getElementById('signup-page').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('signup-page').classList.add('hidden');
+            document.getElementById('login-page').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
