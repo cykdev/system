@@ -137,6 +137,27 @@
             right: 0;
         }
 
+
+
+        .forgot-page > div {
+            margin-bottom: 10px;
+        }
+
+        .forgot-page p {
+            text-align: left;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .forgot-page .back {
+            margin-bottom: 0;
+            font-size: 14px;
+        }
+
+        .forgot-page a {
+            color: black;
+        }
+
         
     </style>
 </head>
@@ -156,7 +177,7 @@
                     <i class="fa-solid fa-lock"></i>
                 </div>
                 <div class="forg-pass">
-                    <a href="#">forgot password?</a>
+                    <a href="#" onclick="showForgotPage()">forgot password?</a>
                 </div>
                 <div class="login-btn">
                     <button>Login</button>
@@ -195,6 +216,21 @@
                 </div>
             </form>
         </div>
+        <div class="forgot-page hidden" id="forg-page">
+            <p>We'll email you a link to reset your password</p>
+            <div class="input-box">
+                <input type="text" name="" id="forg-login" required>
+                <label>Email</label>
+                <i class="fa-solid fa-envelope"></i>
+            </div>
+                <div class="send-email">
+                <button>Send Email</button>
+            </div>
+            <div class="back">
+                <a href="#" onclick="showLogin()">< back to login</a>
+            </div>
+        </div>
+        
     </div>
 
 
@@ -213,7 +249,13 @@
 
         function showLogin() {
             document.getElementById('signup-form').classList.add('hidden');
+            document.getElementById('forg-page').classList.add('hidden');
             document.getElementById('login-form').classList.remove('hidden');
+        }
+
+        function showForgotPage() {
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('forg-page').classList.remove('hidden');
         }
         
     </script>
