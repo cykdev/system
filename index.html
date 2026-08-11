@@ -4,80 +4,218 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>cykdev system</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            text-decoration: none;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: Poppins, sans-serif;
+            }
+
+        .container {
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 50px;
+            text-align: center;
+            border-radius: 15px;
+            width: 320px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+        
+        form > div {
+            margin-bottom: 10px;
+        }
+
+        .no-acc, .have-acc {
+            margin-bottom: 0px;
+            font-size: 13px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: rgb(142, 148, 142);
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: grey;
+        }
+
+        button:active {
+            background-color: black;
+            color: white;
+        }
+
+        .input-box {
+            position: relative;
+        }
+
+        .input-box label {
+            position: relative;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 10px;
+            outline: none;
+        }
+
+        .input-box label {
+            position: absolute;
+            left: 11px;
+            top: 12px;
+            font-size: 13px;
+            color: rgb(187, 183, 178);
+            transition: 0.3s;
+        }
+
+        .input-box input:focus~label,
+        .input-box input:valid~label {
+            color: black;
+            left: 5px;
+            top: -8px;
+            background-color: white;
+            padding: 0px 5px;
+            
+        }
+
+        .input-box i {
+            position: absolute;
+            right: 9px;
+            top: 12px;
+            font-size: 14px;
+        }
+
+        #em {
+            margin-bottom: 0px;
+        }
+
+        .wrn-text {
+            position: relative;
+            margin-top: 2px;
+            margin-bottom: 10px;
+        }
+
+        .wrn-text label {
+            display: flex;
+            margin: 0;
+            margin-left: 5px;
+            padding: 0;
+            font-size: 12px;
+            color: rgb(114, 113, 112);
+        }
+
+        .hidden {
+            display: none;
+        }
+        
+        .forg-pass {
+            margin: 0;
+            position: relative;
+            padding: 10px;
+        }
+
+        .forg-pass a {
+            position: absolute;
+            font-size: 13px;
+            top: 3px;
+            right: 0;
+        }
+
+        
+    </style>
 </head>
 <body>
     <div class="container">
-        <div id="login-page" class="login-form">
+        <div class="login-page" id="login-form">
             <form action="#">
                 <h1>Login</h1>
                 <div class="input-box">
-                    <input type="text" id="l-username" required>
-                    <label>Username</label>
-                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="login-email" required>
+                    <label for="login-email">Email</label>
+                    <i class="fa-solid fa-envelope"></i>
                 </div>
-                <div class="input-box">
-                    <input type="password" id="l-password" required>
-                    <label>Password</label>
+                <div class="input-box" id="em">
+                    <input type="password" id="login-password" required>
+                    <label for="login-password">Password</label>
                     <i class="fa-solid fa-lock"></i>
                 </div>
                 <div class="forg-pass">
                     <a href="#">forgot password?</a>
                 </div>
                 <div class="login-btn">
-                    <button type="submit">Login</button>
+                    <button>Login</button>
                 </div>
                 <div class="no-acc">
-                    <label>Don't have an account? <a href="#" onclick="showSignup()">Sign Up</a></label>
+                    <label for="#">Don't have an account? <a href="#" onclick="showSignup()">Sign Up</a></label>
                 </div>
-
             </form>
         </div>
-
-        <div class="hidden" id="signup-page">
+        <div class="signup-page hidden" id="signup-form">
             <form action="#">
                 <h1>Sign Up</h1>
                 <div class="input-box">
-                    <input type="text" id="s-username" required>
-                    <label>Username</label>
+                    <input type="text" id="signup-username" required>
+                    <label for="signup-username">Username</label>
                     <i class="fa-solid fa-user"></i>
                 </div>
-                <div class="input-box">
-                    <input type="email" id="s-email" required>
-                    <label>Email</label>
+                <div class="input-box" id="em">
+                    <input type="text" id="signup-email" required>
+                    <label for="signup-email">Email</label>
                     <i class="fa-solid fa-envelope"></i>
                 </div>
-                <div class="input-box">
-                    <input type="number" id="s-contact" required>
-                    <label>Contact Number</label>
-                    <i class="fa-solid fa-phone"></i>
+                <div class="wrn-text">
+                    <label>Ex. spongebob@gmail.com</label>
                 </div>
                 <div class="input-box">
-                    <input type="password" id="s-password" required>
-                    <label>Password</label>
+                    <input type="password" id="signup-password" required>
+                    <label for="signup-password">Password</label>
                     <i class="fa-solid fa-lock"></i>
                 </div>
                 <div class="signup-btn">
-                    <button type="submit">Sign Up</button>
+                    <button>Sign Up</button>
                 </div>
                 <div class="have-acc">
-                    <label>Already have an account? <a href="#" onclick="showLogin()">Login</a></label>
+                    <label for="#">Already have an account? <a href="#" onclick="showLogin()">Login</a></label>
                 </div>
             </form>
         </div>
     </div>
 
+
+
+
+
+
     <script>
+        const SUPABASE_URL = "https://aozfjwvhylszidhsxdzx.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvemZqd3ZoeWxzemlkaHN4ZHp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU4NzU2NjgsImV4cCI6MjEwMTQ1MTY2OH0.L1h8HFWimMuigm9HFBXjtFl7B4o69E-RUEa8kguol1E";
+
         function showSignup() {
-            document.getElementById('login-page').classList.add('hidden');
-            document.getElementById('signup-page').classList.remove('hidden');
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('signup-form').classList.remove('hidden');
         }
 
         function showLogin() {
-            document.getElementById('signup-page').classList.add('hidden');
-            document.getElementById('login-page').classList.remove('hidden');
+            document.getElementById('signup-form').classList.add('hidden');
+            document.getElementById('login-form').classList.remove('hidden');
         }
+        
     </script>
 </body>
 </html>
