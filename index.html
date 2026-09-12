@@ -448,7 +448,7 @@
             color: white;
             font-size: 16px;
             font-weight: 700;
-            padding: 15px 18px;
+            padding: 25px 18px;
             border-bottom: 2px solid #444;
         }
 
@@ -472,6 +472,18 @@
         /* Remove border from last row */
         table tbody tr:last-child td {
             border-bottom: none;
+        }
+
+
+        .action-cell button {
+            padding: 8px 15px;
+            background-color: red;
+            color: white;
+            border-radius: 20px;
+            border: none;
+        }
+        .action-cell button:active {
+            background-color: rgba(185, 0, 0, 0.589);
         }
 
     </style>
@@ -610,8 +622,22 @@
                     </table>
                 </div>
 
-                <div class="head-admin-page" id="head-admin-page">
-                    
+                <div class="head-admin-page hidden" id="head-admin-page">
+                    <table>
+                        <thead bgcolor="white">
+                            <tr>
+                                <th>Id</th>
+                                <th>Username</th>
+                                <th>Contact Number</th>
+                                <th>Email Address</th>
+                                <th>Created At</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody bgcolor="#D3D3D3">
+                            
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </main>
@@ -628,7 +654,7 @@
                             <li onclick="showRHistory()"><a href="#">Registration History</a></li>
                         </ul>
                     </div>
-                    <li><a href="#">Head Admin</a></li>
+                    <li onclick="showHeadAdmin()"><a href="#">Head Admin</a></li>
                     <li class="aLogout" onclick="aLogout()"><a href="#">Logout</a><i class="fa-solid fa-arrow-right-from-bracket fa-flip-horizontal"></i></li>
                 </ul>
             </nav>
@@ -717,6 +743,7 @@
             document.getElementById('view-user').classList.add('hidden');
             document.getElementById('user-info').classList.add('hidden');
             document.getElementById('reg-his').classList.add('hidden');
+            document.getElementById("head-admin-page").classList.add("hidden");
         }
 
         const lEmail = document.getElementById('lEmail');
@@ -975,6 +1002,7 @@
             document.getElementById('home').classList.add('hidden');
             document.getElementById('user-info').classList.add('hidden');
             document.getElementById('reg-his').classList.add('hidden');
+            document.getElementById('head-admin-page').classList.add('hidden');
             loadUsers();
         }
 
@@ -1022,6 +1050,7 @@
             document.getElementById('home').classList.add('hidden');
             document.getElementById('user-info').classList.remove('hidden');
             document.getElementById('reg-his').classList.add('hidden');
+            document.getElementById('head-admin-page').classList.add('hidden');
             loadUserInfo();
         }
 
@@ -1065,6 +1094,7 @@
             document.getElementById('home').classList.add('hidden');
             document.getElementById('user-info').classList.add('hidden');
             document.getElementById('reg-his').classList.remove('hidden');
+            document.getElementById('head-admin-page').classList.add('hidden');
             loadRegistrationHistory();
         }
 
@@ -1109,6 +1139,7 @@
             document.getElementById('home').classList.remove('hidden');
             document.getElementById('user-info').classList.add('hidden');
             document.getElementById('reg-his').classList.add('hidden');
+            document.getElementById('head-admin-page').classList.add('hidden');
         }
 
         async function loadTotalUsers() {
@@ -1123,6 +1154,121 @@
 
             document.getElementById("total-users").textContent = count;
         }
+
+
+
+
+        async function showHeadAdmin() {
+            const password = prompt("Enter Head Admin Password:");
+
+            if (password === null) {
+                return;
+            }
+
+            if (password.trim() === "") {
+                alert("Password is required.");
+                return;
+            }
+
+            const { error } = await supabaseClient.auth.signInWithPassword({
+                email: "head@admin.com",
+                password: password
+            });
+
+            if (error) {
+                alert("Incorrect Head Admin Password.");
+                return;
+            }
+
+            alert("Head Admin Access Granted!");
+
+            loadHeadAdmin();
+
+            document.getElementById("home").classList.add("hidden");
+            document.getElementById("view-user").classList.add("hidden");
+            document.getElementById("user-info").classList.add("hidden");
+            document.getElementById("reg-his").classList.add("hidden");
+
+            document.getElementById("head-admin-page").classList.remove("hidden");
+        }   
+
+        
+        async function loadHeadAdmin() {
+
+            const { data: users, error } = await supabaseClient
+                .from("users")
+                .select("id, username, contact_number, email_address, created_at")
+                .order("created_at", { ascending: false });
+
+            if (error) {
+                console.error("Error loading Head Admin users:", error);
+                alert("Failed to load users.");
+                return;
+            }
+
+            const tbody = document.querySelector("#head-admin-page tbody");
+
+            tbody.innerHTML = "";
+
+            users.forEach((user, index) => {
+
+                const row = document.createElement("tr");
+
+                const createdAt = new Date(user.created_at).toLocaleString();
+
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${user.username}</td>
+                    <td>${user.contact_number}</td>
+                    <td>${user.email_address}</td>
+                    <td>${createdAt}</td>
+                    <td class="action-cell">
+                        <button class="delete-btn" onclick="deleteUser('${user.email_address}')">Delete</button>
+                    </td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        
+        async function deleteUser(email) {
+
+            const confirmDelete = confirm(
+                "Are you sure you want to delete this user?\n\n" +
+                email + "\n\n" +
+                "This user will no longer be able to log in."
+            );
+
+            if (!confirmDelete) {
+                return;
+            }
+
+            const { error } = await supabaseClient
+                .rpc("delete_user_by_email", {
+                    p_email: email
+                });
+
+            if (error) {
+                console.error("Delete Error:", error);
+                alert("Failed to delete user: " + error.message);
+                return;
+            }
+
+            alert("User deleted successfully!");
+
+            // Reload the table
+            loadHeadAdmin();
+        }
+
+
+
+
+
+
+
+
+
 
         main.onclick = function() {
             sidebar.classList.remove('show');
