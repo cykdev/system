@@ -21,11 +21,17 @@
             font-family: 'Poppins', sans-serif;
         }
 
+        body .hidden {
+            display: none;
+        }
+
         .container .hidden {
             display: none;
         }
 
-
+        h1 {
+            font-weight: 800;
+        }
 
         /* login-signup styles */
 
@@ -199,7 +205,7 @@
             border: 1px solid;
             border-radius: 5px;
             outline: none;
-
+            padding-right: 35px;
         }
 
         .forgpass-page button {
@@ -246,8 +252,146 @@
 
 
         /* dashboard styles */
+        .admin-page {
+            background-color: rgb(187, 187, 187);
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto 1fr;
+            grid-template-areas: 
+            "header",
+            "main";
+        }
 
+        .admin-page main > .admin-container {
+            background-color: white;
+            height: auto;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .admin-page header {
+            background-color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 75px;
+            padding: 0px 20px;
+        }
+        .admin-page header button {
+            padding: 10px;
+            font-size: 18px;
+            border: none;
+            background-color: transparent;
+        }
+
+        .admin-page main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        aside {
+            position: fixed;
+            right: -200px;
+            width: 200px;
+            background-color: #252525;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+            padding: 10px;
+            padding-top: 80px;
+        }
+
+        aside button {
+            padding: 10px;
+            font-size: 18px;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: white;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .show {
+            right: 0;
+        }
         
+        aside li {
+            list-style: none;
+            padding: 15px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+
+        aside a {
+            color: white;
+            font-size: 15px;
+        }
+
+        aside li:hover {
+            background-color: #424242;
+            
+        }
+        
+        
+
+        .aLogout {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        .aLogout i {
+            font-size: 14px;
+        }
+
+        .uM {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        .uM i {
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .rotate {
+            transform: rotate(180deg);
+        }
+
+        .UM-list li {
+            font-size: 14px;
+            margin: 0 15px;
+            padding: 8px;
+
+        }
+
+        .UM-list a {
+            color: white;
+        }
+
+
+
+        table {
+            text-align: left;
+            border-collapse: collapse;
+        }
+
+        table th {
+            font-size: 20px;
+            font-weight: 800;
+            padding: 20px 10px;
+        }
+
+        table td {
+            padding: 10px;
+        }
 
     </style>
 </head>
@@ -257,7 +401,7 @@
             <div class="login-page" id="login-page">
                 <h1>Login</h1>
                 <div class="input-box">
-                    <input type="text" placeholder="Username/Email" id="lEmail" required>
+                    <input type="text" placeholder="Email" id="lEmail" required>
                     <i class="fa-solid fa-user"></i>
                 </div>
                 <div class="input-box bla">
@@ -270,7 +414,7 @@
                     <a href="#" onclick="showForgPass()">forgot password?</a>
                 </div>
                 <div class="logBtn">
-                    <button id="logBtn">Login</button>
+                    <button id="logBtn" onclick="logBtn()">Login</button>
                 </div>
                 <div class="no-acc">
                     <label for="#">Don't have an account? <a href="#" onclick="showRegister()">Register</a></label>
@@ -289,7 +433,7 @@
                 </div>
                 <div class="input-box blabla">
                     <label for="#">PH(+63)</label>
-                    <input type="number" placeholder="(+63) 9xx xxx xxxx" id="rContact" required>
+                    <input type="text" placeholder="9xx xxx xxxx" id="rContact" maxlength="11" required>
                     <i class="fa-solid fa-phone"></i>
                 </div>
                 <div class="input-box">
@@ -305,7 +449,7 @@
                     <i class="fa-solid fa-lock"></i>
                 </div>
                 <div class="reg-btn">
-                    <button>Register</button>
+                    <button onclick="regBtn()">Register</button>
                 </div>
                 <div class="have-acc">
                     <label for="#">Already have an account? <a href="#" onclick="showLogin()">Login</a></label>
@@ -317,17 +461,94 @@
                 <div class="input-box">
                     <input type="email" id="forg-email" required>
                     <i class="fa-solid fa-envelope"></i>
-                    <button>send</button>
+                    <button onclick="sendreqBtn()">send</button>
                 </div>
                 <label for="#">Ex. spongebob@gmail.com</label>
-                <label class="send-output hidden">Sent Successfully!</label>
+                <label class="send-output hidden" id="send-output">Sent Successfully!</label>
                 <a href="#" onclick="showLogin()"><i class="fa-solid fa-arrow-left"></i> back to Login</a>
             </div>
         </div>
 
     </div>
 
+    <div class="admin-page hidden" id="admin-page">
+        <header>
+            <h1>Admin Dashboard</h1>
+            <button onclick="showSidebar()"><i class="fa-solid fa-bars"></i></button>
+        </header>
+        <main id="main">
+            <div class="admin-container">
+                <div class="home" id="home">
+                    <h1>Welcome Admin!</h1>
+                    <p></p>
+                </div>
+                <div class="view-user hidden" id="view-user">
+                    <table bgcolor="black">
+                        <thead bgcolor="white">
+                            <tr>
+                                <th>Id</th>
+                                <th>Username</th>
+                            </tr>
+                        </thead>
+                        <tbody bgcolor="#D3D3D3">
+                            
+                        </tbody>
+                    </table>
+                </div>
+                <div class="user-info hidden" id="user-info">
+                    <table>
+                        <thead bgcolor="white">
+                            <tr>
+                                <th>Id</th>
+                                <th>Username</th>
+                                <th>Contact Number</th>
+                                <th>Email Address</th>
+                            </tr>
+                        </thead>
+                        <tbody bgcolor="#D3D3D3">
 
+                        </tbody>
+                    </table>
+                </div>
+                <div class="registration-history hidden" id="reg-his">
+                    <table>
+                        <thead bgcolor="white">
+                            <tr>
+                                <th>Id</th>
+                                <th>Username</th>
+                                <th>Created At</th>
+                            </tr>
+                        </thead>
+                        <tbody bgcolor="#D3D3D3">
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="head-admin-page" id="head-admin-page">
+                    
+                </div>
+            </div>
+        </main>
+        <aside id="sidebar">
+            <button onclick="removeSidebar()"><i class="fa-solid fa-xmark"></i></button>
+            <nav>
+                <ul>
+                    <li onclick="showHome()"><a href="#">Home</a></li>
+                    <li class="uM" onclick="showDmenu()"><a href="#">User Management</a><i class="fa-solid fa-angle-down" id="adownIcon"></i></li>
+                    <div class="UM-list hidden" id="UM-list">
+                        <ul>
+                            <li onclick="showVUser()"><a href="#">View Users</a></li>
+                            <li onclick="showUInfo()"><a href="#">User Info</a></li>
+                            <li onclick="showRHistory()"><a href="#">Registration History</a></li>
+                        </ul>
+                    </div>
+                    <li><a href="#">Head Admin</a></li>
+                    <li class="aLogout" onclick="showLogin()"><a href="#">Logout</a><i class="fa-solid fa-arrow-right-from-bracket fa-flip-horizontal"></i></li>
+                </ul>
+            </nav>
+        </aside>
+    </div>
 
 
 
@@ -343,7 +564,14 @@
             SUPABASE_ANON_KEY
         )
 
-        
+        document.getElementById("rContact").addEventListener("input", function () {
+            this.value = this.value.replace(/\D/g, "").slice(0, 10);
+            if (this.value.length > 0 && this.value.charAt(0) !== "9") { 
+                this.value = ""; return; 
+            } 
+            this.value = this.value.slice(0, 10);
+            
+        });
 
 
 
@@ -364,18 +592,23 @@
             document.getElementById('login-page').classList.remove('hidden');
             document.getElementById('register-page').classList.add('hidden');
             document.getElementById('forgpass-page').classList.add('hidden');
+            document.getElementById('send-output').classList.add('hidden');
             document.getElementById('forg-email').value = "";
             document.getElementById('rUsername').value = "";
             document.getElementById('rEmail').value = "";
             document.getElementById('rContact').value = "";
             document.getElementById('rPassword').value = "";
             document.getElementById('rcPassword').value = "";
+            lPassword.value = "";
+            lEmail.value = "";
             rPassword.type = "password";
             rcPassword.type = "password";
             rCloseEye.classList.remove('hidden');
             rcCloseEye.classList.remove('hidden');
             rOpenEye.classList.add('hidden');
             rcOpenEye.classList.add('hidden');
+            document.getElementById('admin-page').classList.add('hidden');
+            document.getElementById('login-signup-page').classList.remove('hidden');
         }
 
         function showForgPass() {
@@ -389,6 +622,7 @@
             lCloseEye.classList.remove('hidden');
         }
 
+        const lEmail = document.getElementById('lEmail');
         const lCloseEye = document.getElementById('lCloseEye');
         const lOpenEye = document.getElementById('lOpenEye');
         const lPassword = document.getElementById('lPassword');
@@ -461,8 +695,214 @@
         }
 
         const rContact = document.getElementById('rContact');
+        
 
 
+
+
+
+
+        
+        
+     
+        async function logBtn() {
+
+            const lemail = document.getElementById('lEmail').value;
+            const lpassword = document.getElementById('lPassword').value;
+
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
+                email: lemail,
+                password: lpassword
+            });
+
+            if (error) {
+                window.alert("Login Error: Invalid login credentials");
+                return;
+            }
+
+            window.alert("Login Successfully!");
+
+            if (data.user.email === "admin@gmail.com") {
+                document.getElementById("login-signup-page").classList.add("hidden");
+                document.getElementById("admin-page").classList.remove("hidden");
+            }
+
+            document.getElementById('lEmail').value = "";
+            document.getElementById('lPassword').value = "";
+
+        }
+
+
+
+        
+        async function regBtn() {
+
+            // Get values from the registration form
+            const username = document.getElementById("rUsername").value;
+            const email = document.getElementById("rEmail").value;
+            const contact = document.getElementById("rContact").value;
+            const password = document.getElementById("rPassword").value;
+            const confirmPassword = document.getElementById("rcPassword").value;
+
+
+            if (username === "" || email === "" || contact === "") {
+                window.alert("Registration Error: Please fill up everything!");
+                return;
+            }
+
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                window.alert("Passwords do not match!");
+                return;
+            }
+
+
+
+            // Create account in Supabase Authentication
+            const { data: authData, error: authError } =
+                await supabaseClient.auth.signUp({
+                    email: email,
+                    password: password
+                });
+
+
+            // Check for authentication error
+            if (authError) {
+                window.alert("Registration Error: " + authError.message);
+                return;
+            }
+
+            // Get the user's Auth ID
+            const userId = authData.user.id;
+
+            // Insert user's information into the users table
+            const { data, error } = await supabaseClient
+                .from("users")
+                .insert([
+                    {
+                        id: userId,
+                        username: username,
+                        contact_number: contact,
+                        email_address: email
+                    }
+                ]);
+
+
+            // Check for database error
+            if (error) {
+                window.alert("Database Error: " + error.message);
+                return;
+            }
+
+            // Registration successful
+            window.alert("Register Successfully!");
+            
+            document.getElementById("rUsername").value = "";
+            document.getElementById("rEmail").value = "";
+            document.getElementById("rContact").value = "";
+            document.getElementById("rPassword").value = "";
+            document.getElementById("rcPassword").value = "";
+
+
+            console.log("User:", authData.user);
+            console.log("Profile:", data);
+        }
+
+
+
+
+            
+    
+        async function sendreqBtn() {
+
+            const email = document.getElementById("forg-email").value.trim();
+
+            // Check if email is empty
+            if (email === "") {
+                window.alert("Password Reset Error: Please enter your email!");
+                return;
+            }
+
+            // Request password reset from Supabase Auth
+            const { error } = await supabaseClient.auth.resetPasswordForEmail(
+                email,
+                {
+                    redirectTo: "http://127.0.0.1:5500/index.html"
+                }
+            );
+
+            // Check for error
+            if (error) {
+                console.error(error);
+                window.alert("Password Reset Error: " + error.message);
+                return;
+            }
+
+            // Show success message
+            window.alert("Password reset link has been sent to your email!");
+
+            // Show "Sent Successfully!" label
+            document.querySelector(".send-output").classList.remove("hidden");
+
+            // Clear email input
+            document.getElementById("forg-email").value = "";
+        }
+
+
+
+
+
+
+        const sidebar = document.getElementById('sidebar');
+        const main = document.getElementById('main');
+
+        function showSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        function removeSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+            document.getElementById('UM-list').classList.add('hidden');
+        }
+
+        function showDmenu() {
+            document.getElementById('UM-list').classList.toggle('hidden');
+            document.getElementById('adownIcon').classList.toggle('rotate');
+        }
+        
+        function showVUser() {
+            document.getElementById('view-user').classList.remove('hidden');
+            document.getElementById('home').classList.add('hidden');
+            document.getElementById('user-info').classList.add('hidden');
+            document.getElementById('reg-his').classList.add('hidden');
+        }
+
+        function showUInfo() {
+            document.getElementById('view-user').classList.add('hidden');
+            document.getElementById('home').classList.add('hidden');
+            document.getElementById('user-info').classList.remove('hidden');
+            document.getElementById('reg-his').classList.add('hidden');
+        }
+
+        function showRHistory() {
+            document.getElementById('view-user').classList.add('hidden');
+            document.getElementById('home').classList.add('hidden');
+            document.getElementById('user-info').classList.add('hidden');
+            document.getElementById('reg-his').classList.remove('hidden');
+        }
+
+        function showHome() {
+            document.getElementById('view-user').classList.add('hidden');
+            document.getElementById('home').classList.remove('hidden');
+            document.getElementById('user-info').classList.add('hidden');
+            document.getElementById('reg-his').classList.add('hidden');
+        }
+
+        main.onclick = function() {
+            sidebar.classList.remove('show');
+            document.getElementById('UM-list').classList.add('hidden');
+            document.getElementById('adownIcon').classList.remove('rotate');
+        }
 
     </script>
 </body>
