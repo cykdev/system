@@ -293,6 +293,60 @@
             justify-content: center;
         }
 
+        
+/* Home dashboard */
+        .home {
+            width: 100%;
+            padding: 20px;
+        }
+
+        .home h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .home p {
+            color: #666;
+            font-size: 15px;
+            margin-bottom: 30px;
+        }
+
+        /* Total Users card */
+        .tot-user {
+            width: 100%;
+            min-height: 150px;
+            padding: 25px;
+            background-color: #252525;
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tot-user h2 {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .tot-user h3 {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1;
+            margin: 0;
+        }
+
+
+
+
+
+
+
 
         aside {
             position: fixed;
@@ -379,18 +433,45 @@
 
 
         table {
+            width: 100%;
             text-align: left;
             border-collapse: collapse;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
         }
 
+        /* Table header */
         table th {
-            font-size: 20px;
-            font-weight: 800;
-            padding: 20px 10px;
+            background-color: #252525;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 15px 18px;
+            border-bottom: 2px solid #444;
         }
 
+        /* Table cells */
         table td {
-            padding: 10px;
+            padding: 13px 18px;
+            font-size: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Alternating rows */
+        table tbody tr:nth-child(even) {
+            background-color: #f5f5f5;
+        }
+
+        /* Hover effect */
+        table tbody tr:hover {
+            background-color: #e8e8e8;
+        }
+
+        /* Remove border from last row */
+        table tbody tr:last-child td {
+            border-bottom: none;
         }
 
     </style>
@@ -480,7 +561,11 @@
             <div class="admin-container">
                 <div class="home" id="home">
                     <h1>Welcome Admin!</h1>
-                    <p></p>
+                    <p>Manage and monitor your registered users from this dashboard.</p>
+                    <div class="tot-user">
+                        <h2>Total Users</h2>
+                        <h3 id="total-users">0</h3>
+                    </div>
                 </div>
                 <div class="view-user hidden" id="view-user">
                     <table bgcolor="black">
@@ -544,7 +629,7 @@
                         </ul>
                     </div>
                     <li><a href="#">Head Admin</a></li>
-                    <li class="aLogout" onclick="showLogin()"><a href="#">Logout</a><i class="fa-solid fa-arrow-right-from-bracket fa-flip-horizontal"></i></li>
+                    <li class="aLogout" onclick="aLogout()"><a href="#">Logout</a><i class="fa-solid fa-arrow-right-from-bracket fa-flip-horizontal"></i></li>
                 </ul>
             </nav>
         </aside>
@@ -620,6 +705,18 @@
             lPassword.type = "password";
             lOpenEye.classList.add('hidden');
             lCloseEye.classList.remove('hidden');
+        }
+
+        function aLogout() {
+            document.getElementById('UM-list').classList.toggle('hidden');
+            document.getElementById('adownIcon').classList.toggle('rotate');
+            document.getElementById('admin-page').classList.add('hidden');
+            document.getElementById('login-signup-page').classList.remove('hidden');
+            document.getElementById('sidebar').classList.toggle('show');
+            document.getElementById('home').classList.remove('hidden');
+            document.getElementById('view-user').classList.add('hidden');
+            document.getElementById('user-info').classList.add('hidden');
+            document.getElementById('reg-his').classList.add('hidden');
         }
 
         const lEmail = document.getElementById('lEmail');
@@ -727,6 +824,7 @@
                 document.getElementById("admin-page").classList.remove("hidden");
             }
 
+            loadTotalUsers();
             document.getElementById('lEmail').value = "";
             document.getElementById('lPassword').value = "";
 
@@ -870,32 +968,160 @@
             document.getElementById('adownIcon').classList.toggle('rotate');
         }
         
+
+
         function showVUser() {
             document.getElementById('view-user').classList.remove('hidden');
             document.getElementById('home').classList.add('hidden');
             document.getElementById('user-info').classList.add('hidden');
             document.getElementById('reg-his').classList.add('hidden');
+            loadUsers();
         }
+
+        async function loadUsers() {
+
+            const { data: users, error } = await supabaseClient
+                .from("users")
+                .select("id, username");
+
+            if (error) {
+                console.error("Error loading users:", error);
+                window.alert("Error loading users: " + error.message);
+                return;
+            }
+
+            const tbody = document.querySelector("#view-user tbody");
+
+            // Clear existing rows
+            tbody.innerHTML = "";
+
+            // Display each user
+            users.forEach((user, index) => {
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${user.username}</td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+
+
+
+
+
+
+
+
 
         function showUInfo() {
             document.getElementById('view-user').classList.add('hidden');
             document.getElementById('home').classList.add('hidden');
             document.getElementById('user-info').classList.remove('hidden');
             document.getElementById('reg-his').classList.add('hidden');
+            loadUserInfo();
         }
+
+        async function loadUserInfo() {
+            const { data: users, error } = await supabaseClient
+                .from("users")
+                .select("id, username, contact_number, email_address");
+
+            if (error) {
+                console.error("Error loading user info:", error);
+                window.alert("Error loading user info: " + error.message);
+                return;
+            }
+
+            const tbody = document.querySelector("#user-info tbody");
+
+            tbody.innerHTML = "";
+
+            users.forEach((user, index) => {
+
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${user.username}</td>
+                    <td>${user.contact_number}</td>
+                    <td>${user.email_address}</td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+
+
+
+
 
         function showRHistory() {
             document.getElementById('view-user').classList.add('hidden');
             document.getElementById('home').classList.add('hidden');
             document.getElementById('user-info').classList.add('hidden');
             document.getElementById('reg-his').classList.remove('hidden');
+            loadRegistrationHistory();
         }
+
+        async function loadRegistrationHistory() {
+            const { data: users, error } = await supabaseClient
+                .from("users")
+                .select("id, username, created_at")
+                .order("created_at", { ascending: false });
+
+            if (error) {
+                console.error("Error loading registration history:", error);
+                window.alert("Error loading registration history: " + error.message);
+                return;
+            }
+
+            const tbody = document.querySelector("#reg-his tbody");
+
+            tbody.innerHTML = "";
+
+            users.forEach((user, index) => {
+
+                const row = document.createElement("tr");
+
+                const createdAt = new Date(user.created_at).toLocaleString();
+
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${user.username}</td>
+                    <td>${createdAt}</td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+
+
+
 
         function showHome() {
             document.getElementById('view-user').classList.add('hidden');
             document.getElementById('home').classList.remove('hidden');
             document.getElementById('user-info').classList.add('hidden');
             document.getElementById('reg-his').classList.add('hidden');
+        }
+
+        async function loadTotalUsers() {
+            const { count, error } = await supabaseClient
+                .from("users")
+                .select("*", { count: "exact", head: true });
+
+            if (error) {
+                console.error("Error loading total users:", error);
+                return;
+            }
+
+            document.getElementById("total-users").textContent = count;
         }
 
         main.onclick = function() {
