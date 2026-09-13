@@ -15,6 +15,7 @@
 
         body {
             min-height: 100vh;
+            width: 100%;
             display: flex;
             flex-direction: column;
             background-color: rgb(200, 200, 200);
@@ -50,7 +51,6 @@
             flex-direction: column;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.35);
             padding: 40px;
-            margin: 15px;
             width: auto;
             border-radius: 20px;
         }
@@ -264,13 +264,26 @@
             "main";
         }
 
+        
+
+
         .admin-page main > .admin-container {
             background-color: white;
+
+            /* FIXED SIZE */
+            width: 1000px;
             height: auto;
+
+            /* Prevent it from becoming wider than a small screen */
+            max-width: calc(100% - 30px);
+            min-width: 0;
+
             padding: 20px;
-            margin: 15px;
             border-radius: 20px;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.35);
+
+            /* Keep tables inside the container */
+            overflow: hidden;
         }
 
         .admin-page header {
@@ -293,7 +306,16 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            width: 100%;
+            min-width: 0;
         }
+
+
+
+
+
+
+
 
         
 /* Home dashboard */
@@ -439,7 +461,7 @@
             text-align: left;
             border-collapse: collapse;
             background-color: white;
-            border-radius: 10px;
+            border-radius: none;
             overflow: hidden;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
         }
@@ -477,15 +499,145 @@
         }
 
 
+        /* Head Admin table - responsive on small screens */
+        .view-user,
+        .user-info,
+        .registration-history,
+        .head-admin-page {
+            height: 400px;
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+            overflow-x: auto;
+            overflow-y: auto;
+        }
+
+        .head-admin-page {
+            padding: 0;
+        }
+
+        .head-admin-table-container {
+            width: 100%;
+            max-width: 100%;
+            height: 400px;
+            overflow-x: auto;
+            overflow-y: auto;
+            background-color: #D3D3D3;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tit-hadmin {
+            position: sticky;
+            width: 100%;
+            top: 0;
+            background-color: white;
+            padding: 10px;
+
+        }
+
+        .head-admin-table-container table {
+            min-width: 800px;
+        }
+
+        
+
+        .head-admin-page table {
+            width: 100%;
+        }
+
+        .head-admin-page th,
+        .head-admin-page td {
+            white-space: nowrap;
+        }
+
+        .head-admin-page .action-cell {
+            text-align: right;
+            width: 110px;
+        }
+
         .action-cell button {
-            padding: 8px 15px;
+            padding: 5px 15px;
             background-color: red;
             color: white;
             border-radius: 20px;
             border: none;
+            cursor: pointer;
+            white-space: nowrap;
         }
+
         .action-cell button:active {
             background-color: rgba(185, 0, 0, 0.589);
+        }
+
+        @media (max-width: 300px) {
+            .admin-page main {
+                width: 100%;
+                min-width: 0;
+            }
+
+            @media (max-width: 300px) {
+                .admin-page main > .admin-container {
+                    width: 280px;
+                    height: auto;
+                    max-width: calc(100% - 20px);
+                    padding: 10px;
+                    overflow: hidden;
+                }
+            }
+
+            .home {
+                padding: 10px;
+                min-width: 0;
+            }
+
+            .home h1 {
+                font-size: 24px;
+            }
+
+            .home p {
+                font-size: 13px;
+            }
+
+            .tot-user {
+                min-width: 0;
+                padding: 15px;
+            }
+
+            .view-user,
+            .user-info,
+            .registration-history,
+            .head-admin-page {
+                height: 400px;
+                width: 100%;
+                max-width: 100%;
+                min-width: 0;
+                overflow-x: auto;
+                overflow-y: auto;
+            }
+
+            .head-admin-table-container {
+                width: 100%;
+                max-width: 100%;
+                height: auto;
+                overflow-x: auto;
+                overflow-y: auto;
+            }
+
+            .head-admin-table-container table {
+                min-width: 800px;
+            }
+
+            .admin-page header h1 {
+                font-size: 24px;
+            }
+        }
+
+        /* Prevent the whole page from becoming wider than the screen */
+        html,
+        body {
+            max-width: 100%;
+            overflow-x: hidden;
         }
 
     </style>
@@ -518,7 +670,7 @@
             <div class="register-page hidden" id="register-page">
                 <h1>Register</h1>
                 <div class="input-box">
-                    <input type="text" placeholder="Username" id="rUsername" required>
+                    <input type="text" maxlength="20" placeholder="Username" id="rUsername" required>
                     <i class="fa-solid fa-user"></i>
                 </div>
                 <div class="input-box na">
@@ -532,13 +684,13 @@
                     <i class="fa-solid fa-phone"></i>
                 </div>
                 <div class="input-box">
-                    <input type="password" placeholder="Password" id="rPassword" required>
+                    <input type="password" placeholder="Password" id="rPassword" minlength="8" required>
                     <i class="fa-solid fa-eye-slash" id="rCloseEye"></i>
                     <i class="fa-solid fa-eye hidden" id="rOpenEye"></i>
                     <i class="fa-solid fa-lock"></i>
                 </div>
                 <div class="input-box">
-                    <input type="password" placeholder="Confirm password" id="rcPassword" required>
+                    <input type="password" placeholder="Confirm password" id="rcPassword" minlength="8" required>
                     <i class="fa-solid fa-eye-slash" id="rcCloseEye"></i>
                     <i class="fa-solid fa-eye hidden" id="rcOpenEye"></i>
                     <i class="fa-solid fa-lock"></i>
@@ -582,6 +734,9 @@
                     </div>
                 </div>
                 <div class="view-user hidden" id="view-user">
+                    <div class="tit-hadmin">
+                        <h1>Users</h1>
+                    </div>
                     <table bgcolor="black">
                         <thead bgcolor="white">
                             <tr>
@@ -595,6 +750,9 @@
                     </table>
                 </div>
                 <div class="user-info hidden" id="user-info">
+                    <div class="tit-hadmin">
+                        <h1>User Information</h1>
+                    </div>
                     <table>
                         <thead bgcolor="white">
                             <tr>
@@ -610,6 +768,9 @@
                     </table>
                 </div>
                 <div class="registration-history hidden" id="reg-his">
+                    <div class="tit-hadmin">
+                        <h1>Registration History</h1>
+                    </div>
                     <table>
                         <thead bgcolor="white">
                             <tr>
@@ -625,21 +786,26 @@
                 </div>
 
                 <div class="head-admin-page hidden" id="head-admin-page">
-                    <table>
-                        <thead bgcolor="white">
-                            <tr>
-                                <th>Id</th>
-                                <th>Username</th>
-                                <th>Contact Number</th>
-                                <th>Email Address</th>
-                                <th>Created At</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody bgcolor="#D3D3D3">
-                            
-                        </tbody>
-                    </table>
+                    <div class="head-admin-table-container">
+                        <div class="tit-hadmin">
+                            <h1>Manage User</h1>
+                        </div>
+                        <table>
+                            <thead bgcolor="white">
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Username</th>
+                                    <th>Contact Number</th>
+                                    <th>Email Address</th>
+                                    <th>Created At</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody bgcolor="#D3D3D3">
+                                
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </main>
@@ -874,6 +1040,11 @@
 
             if (username === "" || email === "" || contact === "") {
                 window.alert("Registration Error: Please fill up everything!");
+                return;
+            }
+
+            if (password.length < 8) {
+                alert("Password must be at least 8 characters long!");
                 return;
             }
 
