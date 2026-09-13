@@ -530,7 +530,9 @@
         .tit-hadmin {
             position: sticky;
             width: 100%;
+            max-width: 100%;
             top: 0;
+            left: 0;
             background-color: white;
             padding: 10px;
 
@@ -624,6 +626,12 @@
                 overflow-y: auto;
             }
 
+            .tit-hadmin {
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+
             .head-admin-table-container table {
                 min-width: 800px;
             }
@@ -631,6 +639,8 @@
             .admin-page header h1 {
                 font-size: 24px;
             }
+
+
         }
 
         /* Prevent the whole page from becoming wider than the screen */
