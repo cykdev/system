@@ -160,6 +160,65 @@
             document.getElementById('fcPassword').type = "password";
         }
 
+        document.getElementById("confirmBtn").onclick = async function () {
+
+            const fPassword = document.getElementById("fPassword").value;
+            const fcPassword = document.getElementById("fcPassword").value;
+
+
+            if (fPassword === "" || fcPassword === "") {
+
+                alert("Password Reset Error: Please fill up everything!");
+
+                return;
+
+            }
+
+
+            if (fPassword.length < 8) {
+
+                alert("Password Reset Error: Password must be at least 8 characters long!");
+
+                return;
+
+            }
+
+
+            if (fPassword !== fcPassword) {
+
+                alert("Password Reset Error: Passwords do not match!");
+
+                return;
+
+            }
+
+
+            const { error } = await supabaseClient.auth.updateUser({
+                password: fPassword
+            });
+
+
+            if (error) {
+
+                console.error("Password Update Error:", error);
+
+                alert("Password Reset Error: " + error.message);
+
+                return;
+
+            }
+
+
+            alert("Password reset successfully!");
+
+
+            await supabaseClient.auth.signOut();
+
+
+            window.location.href = "https://cykdev.github.io/system/";
+
+        };
+
     </script>
 </body>
 </html>
