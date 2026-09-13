@@ -269,20 +269,13 @@
 
         .admin-page main > .admin-container {
             background-color: white;
-
-            /* FIXED SIZE */
             width: 1000px;
             height: auto;
-
-            /* Prevent it from becoming wider than a small screen */
             max-width: calc(100% - 30px);
             min-width: 0;
-
             padding: 20px;
             border-radius: 20px;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.35);
-
-            /* Keep tables inside the container */
             overflow: hidden;
         }
 
@@ -466,7 +459,7 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
         }
 
-        /* Table header */
+        
         table th {
             background-color: #252525;
             color: white;
@@ -476,30 +469,29 @@
             border-bottom: 2px solid #444;
         }
 
-        /* Table cells */
+        
         table td {
             padding: 13px 18px;
             font-size: 15px;
             border-bottom: 1px solid #ddd;
         }
 
-        /* Alternating rows */
+        
         table tbody tr:nth-child(even) {
             background-color: #f5f5f5;
         }
 
-        /* Hover effect */
         table tbody tr:hover {
             background-color: #e8e8e8;
         }
 
-        /* Remove border from last row */
+        
         table tbody tr:last-child td {
             border-bottom: none;
         }
 
 
-        /* Head Admin table - responsive on small screens */
+        /* Head Admin table */
         .view-user,
         .user-info,
         .registration-history,
@@ -643,7 +635,7 @@
 
         }
 
-        /* Prevent the whole page from becoming wider than the screen */
+        
         html,
         body {
             max-width: 100%;
@@ -680,7 +672,7 @@
             <div class="register-page hidden" id="register-page">
                 <h1>Register</h1>
                 <div class="input-box">
-                    <input type="text" maxlength="20" placeholder="Username" id="rUsername" required>
+                    <input type="text" maxlength="20" placeholder="Username" id="rUsername" style="text-transform: lowercase;" required>
                     <i class="fa-solid fa-user"></i>
                 </div>
                 <div class="input-box na">
@@ -801,7 +793,7 @@
                             <h1>Manage User</h1>
                         </div>
                         <table>
-                            <thead bgcolor="white">
+                            <thead class="theader" bgcolor="white">
                                 <tr>
                                     <th>Id</th>
                                     <th>Username</th>
@@ -1046,7 +1038,7 @@
        
         async function regBtn() {
             // Get values from registration form
-            const username = document.getElementById("rUsername").value.trim();
+            const username = document.getElementById("rUsername").value.trim().toLowerCase();
             const email = document.getElementById("rEmail").value.trim();
             const contact = document.getElementById("rContact").value.trim();
             const password = document.getElementById("rPassword").value;
@@ -1055,6 +1047,11 @@
             // Check empty fields
             if (username === "" || email === "" || contact === "" || password === "" || confirmPassword === "") {
                 alert("Registration Error: Please fill up everything!");
+                return;
+            }
+
+            if (contact.length !== 10) {
+                alert("Registration Error: Contact number must be exactly 10 digits!");
                 return;
             }
 
