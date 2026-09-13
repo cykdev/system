@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>reset password</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: lightgray;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .reset-pass-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            position: relative;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 300px;
+            padding: 30px;
+            margin: 20px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            font-weight: 800;
+            font-size: 25px;
+        }
+
+        .container > div {
+            position: relative;
+            width: 90%;
+            margin-bottom: 10px;
+        }
+
+        .container input {
+            width: 100%;
+            padding: 10px;
+            outline: none;
+            padding-right: 60px;
+            border-radius: 5px;
+            border: 1px solid;
+        }
+
+        .container i {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            font-size: 14px;
+        }
+
+        .container .fa-eye-slash,
+        .container .fa-eye {
+            position: absolute;
+            right: 35px;
+            font-size: 14px;
+            color: rgb(143, 143, 143);
+        }
+
+        .container button {
+            width: 90%;
+            padding: 12px;
+            border-radius: 5px;
+            border: none;
+            background-color: rgb(116, 116, 116);
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="reset-pass-page">
+        <div class="container">
+            <h1>Reset Password</h1>
+            <div class="input-box">
+                <input type="password" id="fPassword" minlength="8" placeholder="New Password" required>
+                <i class="fa-solid fa-lock"></i>
+                <i onclick="openEye()" class="fa-solid fa-eye-slash" id="fCloseEye"></i>
+                <i onclick="closeEye()" class="fa-solid fa-eye hidden" id="fOpenEye"></i>
+            </div>
+            <div class="input-box">
+                <input type="password" id="fcPassword" minlength="8" placeholder="Confirm New Password" required>
+                <i class="fa-solid fa-lock"></i>
+                <i onclick="fcOpenEye()" class="fa-solid fa-eye-slash" id="fcCloseEye"></i>
+                <i onclick="fcCloseEye()" class="fa-solid fa-eye hidden" id="fcOpenEye"></i>
+            </div>
+            <button id="confirmBtn">Confirm</button>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = "https://aozfjwvhylszidhsxdzx.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvemZqd3ZoeWxzemlkaHN4ZHp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU4NzU2NjgsImV4cCI6MjEwMTQ1MTY2OH0.L1h8HFWimMuigm9HFBXjtFl7B4o69E-RUEa8kguol1E";
+
+        const supabaseClient = window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        )
+
+
+
+
+        function openEye() {
+            document.getElementById('fOpenEye').classList.remove('hidden');
+            document.getElementById('fCloseEye').classList.add('hidden');
+            document.getElementById('fPassword').type = "text";
+        }
+
+        function closeEye() {
+            document.getElementById('fOpenEye').classList.add('hidden');
+            document.getElementById('fCloseEye').classList.remove('hidden');
+            document.getElementById('fPassword').type = "password";
+        }
+
+        function fcOpenEye() {
+            document.getElementById('fcOpenEye').classList.remove('hidden');
+            document.getElementById('fcCloseEye').classList.add('hidden');
+            document.getElementById('fcPassword').type = "text";
+        }
+
+        function fcCloseEye() {
+            document.getElementById('fcOpenEye').classList.add('hidden');
+            document.getElementById('fcCloseEye').classList.remove('hidden');
+            document.getElementById('fcPassword').type = "password";
+        }
+
+    </script>
+</body>
+</html>
