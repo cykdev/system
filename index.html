@@ -1041,52 +1041,103 @@
 
 
         
-        async function regBtn() {
 
-            // Get values from the registration form
-            const username = document.getElementById("rUsername").value;
-            const email = document.getElementById("rEmail").value;
-            const contact = document.getElementById("rContact").value;
+        
+       
+        async function regBtn() {
+            // Get values from registration form
+            const username = document.getElementById("rUsername").value.trim();
+            const email = document.getElementById("rEmail").value.trim();
+            const contact = document.getElementById("rContact").value.trim();
             const password = document.getElementById("rPassword").value;
             const confirmPassword = document.getElementById("rcPassword").value;
 
-
-            if (username === "" || email === "" || contact === "") {
-                window.alert("Registration Error: Please fill up everything!");
+            // Check empty fields
+            if (username === "" || email === "" || contact === "" || password === "" || confirmPassword === "") {
+                alert("Registration Error: Please fill up everything!");
                 return;
             }
 
+            // Check password length
             if (password.length < 8) {
                 alert("Password must be at least 8 characters long!");
                 return;
             }
 
-            // Check if passwords match
+            // Check password confirmation
             if (password !== confirmPassword) {
-                window.alert("Passwords do not match!");
+                alert("Passwords do not match!");
                 return;
             }
 
+            // ==========================================
+            // CHECK DUPLICATE USERNAME
+            // ==========================================
+            const { data: usernameData, error: usernameError } =
+                await supabaseClient
+                    .from("users")
+                    .select("id")
+                    .eq("username", username)
+                    .limit(1);
 
+            if (usernameError) {
+                console.error("Username check error:", usernameError);
+                alert("Registration Error: " + usernameError.message);
+                return;
+            }
 
-            // Create account in Supabase Authentication
+            if (usernameData.length > 0) {
+                alert("Registration Error: Username is already taken!");
+                return;
+            }
+
+            // ==========================================
+            // CHECK DUPLICATE CONTACT NUMBER
+            // ==========================================
+            const { data: contactData, error: contactError } =
+                await supabaseClient
+                    .from("users")
+                    .select("id")
+                    .eq("contact_number", contact)
+                    .limit(1);
+
+            if (contactError) {
+                console.error("Contact check error:", contactError);
+                alert("Registration Error: " + contactError.message);
+                return;
+            }
+
+            if (contactData.length > 0) {
+                alert("Registration Error: Contact number is already registered!");
+                return;
+            }
+
+            // ==========================================
+            // CREATE SUPABASE AUTH ACCOUNT
+            // ==========================================
             const { data: authData, error: authError } =
                 await supabaseClient.auth.signUp({
                     email: email,
                     password: password
                 });
 
-
-            // Check for authentication error
             if (authError) {
-                window.alert("Registration Error: " + authError.message);
+                alert("Registration Error: " + authError.message);
                 return;
             }
 
-            // Get the user's Auth ID
+            // Make sure Auth user was created
+            if (!authData.user) {
+                alert("Registration Error: Unable to create account.");
+                return;
+            }
+
+            // Get Auth user ID
             const userId = authData.user.id;
 
-            // Insert user's information into the users table
+            // ==========================================
+            // INSERT USER INFORMATION
+            // ==========================================
             const { data, error } = await supabaseClient
                 .from("users")
                 .insert([
@@ -1096,28 +1147,49 @@
                         contact_number: contact,
                         email_address: email
                     }
-                ]);
+                ])
+                .select();
 
-
-            // Check for database error
             if (error) {
-                window.alert("Database Error: " + error.message);
+                console.error("Database Error:", error);
+
+                // Handle database UNIQUE constraint errors
+                if (error.code === "23505") {
+                    if (error.message.includes("username")) {
+                        alert("Registration Error: Username is already taken!");
+                    } else if (error.message.includes("contact_number")) {
+                        alert("Registration Error: Contact number is already registered!");
+                    } else {
+                        alert("Registration Error: This information is already registered!");
+                    }
+                } else {
+                    alert("Database Error: " + error.message);
+                }
+
                 return;
             }
 
-            // Registration successful
-            window.alert("Register Successfully!");
-            
+            // ==========================================
+            // SUCCESS
+            // ==========================================
+            alert("Register Successfully!");
+
+            // Clear form
             document.getElementById("rUsername").value = "";
             document.getElementById("rEmail").value = "";
             document.getElementById("rContact").value = "";
             document.getElementById("rPassword").value = "";
             document.getElementById("rcPassword").value = "";
 
-
             console.log("User:", authData.user);
             console.log("Profile:", data);
         }
+
+
+
+
+
+
 
 
 
